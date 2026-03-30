@@ -1,3 +1,6 @@
+# json data for providers
+src/core/data/providers.json
+
 # Logs
 logs
 *.log
