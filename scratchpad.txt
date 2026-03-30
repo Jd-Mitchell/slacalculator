@@ -1,0 +1,35 @@
+Should I create a separate Validation file and have all of the validations for the input from the user as well as the validation of the hours?
+Or should I put the validation into the separate files for each class? I.e BusinessHours and one in the DOM controller?
+
+My intiuition says to put it in its own section and each file uses it for its purpose. How should I do this?
+
+If I validate the input from the user in the dom, I don't need to validate it going into the business hours as the input validation stops anything from coming through that would cause an error in the calculations of user error.
+
+I will put the DOM validation into the DOM file as it's part of that Domain. I will then put the data validation into the BusinessHours file.
+
+Validations:
+
+First I need to validate the user input to make sure the input is correct, such as:
+    - fields can't be blank. COMPLETE
+    - The length of the numbers needs to be 4.COMPLETE
+    - times must be entered in 24 hour military style. "0800". COMPLETE
+    - The system will convert the number from "0800" into individual numbers slice the numbers out and then check them. COMPLETE
+    - "2460" is not accepted, as the hours can only be between "00" to "23" and minutes between "00" to "59". COMPLETE
+    - "CLOSED" and "closed" are accepted only in the opening and closing but any other letters are not accpeted. COMPLETE
+    - The interface should be greyed out if there's no input in the opening time.
+    - If the opening has "CLOSED" or "closed", the closing should also show the same and grey it out so it can't be changed.
+
+Next I would need to validate the hours against the technician's start times:
+    - If all days opening and closing times are marked as "CLOSED", it should throw an error and advise that there must be at least 1 opening and closing time marked. COMPLETE
+    - At the moment, opening hours must not exceed the closing hours, unless the time is less than the tech start time. COMPLETE
+    - If the opening and closing hours are both outside the tech start and finish times, it will not be accepted. COMPLETE
+
+Another Validation I will do with the Calculations is:
+
+Calculation rules:
+
+    - If the calculation can't get a time after 24 hours from the end of the SLA:
+        * if the SLA is less than 8 hours, it will set the date to the next available open day and set it to the SLA amount  or the closing time whichever is shortest.
+    - if over 24 hours:
+        * set the date to the next available day and set it to the closing time.
+    

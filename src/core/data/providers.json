@@ -1,0 +1,43 @@
+[
+    {
+        "name": "Computech",
+        "techStart": "0800",
+        "techFinish": "1800",
+        "slas": {
+            "priority": 2,
+            "metro": 4,
+            "country": 4,
+            "remote": 72
+        }
+    },
+    {
+        "name": "Garry's IT",
+        "techStart": "0800",
+        "techFinish": "1800",
+        "slas": {
+            "metro": 4,
+            "country": 24,
+            "remote": 72
+        }
+    },
+    {
+        "name": "Able Computing",
+        "techStart": "0800",
+        "techFinish": "1800",
+        "slas": {
+            "metro": 4,
+            "country": 24,
+            "remote": 72
+        }
+    },
+    {
+        "name": "Zuul",
+        "techStart": "0800",
+        "techFinish": "1800",
+        "slas": {
+            "metro": 4,
+            "country": 24,
+            "remote": 72
+        }
+    }
+]

@@ -1,0 +1,390 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.85rem;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    background-color: darkslategrey;
+    display: flex;
+    /* position: relative; */
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.main {
+    /* width: 85vw;
+    height: calc(85vw * (800/500)); */
+    width: 500px;
+    height: 750px;
+    /* max-width: 500px;
+    max-height: 800px; */
+    /* width: 600px;
+    height: 800px; */
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 4px solid black;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 3px solid black;
+    border-radius: 2cap;
+    box-shadow: 10px 15px 5px -2px
+}
+
+.header {
+    /* margin: 0 auto;
+    padding: 2rem;
+    width: 100%; */
+    width: 100%;
+    background-color: white;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagebox {
+    margin: 0 auto;
+    width: 30%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.image {
+    padding: 10%;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.heading-container {
+    padding: 2rem;
+    flex: 1 1 auto;
+}
+
+.heading-container h1 {
+    font-size: 2rem;
+}
+
+.display-box {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 6%;
+    background-color: grey;
+}
+
+.inputbox {
+    padding: 1rem;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: lightgrey;
+    overflow: hidden;
+    position: relative;
+}
+
+.sla {
+    display: block;
+    width: 25%;
+    height: 100%;
+}
+.sla-dropdowns {
+    width: 90%;
+    /* height: 10%; */
+    background-color: blue;
+}
+
+.qrg-box {
+    /* margin: 2px; */
+    width: 90%;
+    margin-bottom: 2%;
+    /* position: absolute; */
+    /* bottom: 0; */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.qrg-button {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.qrg-button a{
+    text-decoration: none
+
+}
+.operating-hours-box {
+    background-color: white;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 2%;
+    overflow: hidden;
+}
+
+.operating-hours-inner {
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.operating-input-container {
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.operating-input-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.operating-input {
+    /* background-color: blue; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+.button-box {
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 10px;
+}
+
+.day-selector {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.operating-hours {
+    display: flex;
+    justify-content: space-around;
+}
+
+.drop-down {
+    /* padding: 2px; */
+    margin-bottom: 0.5rem;
+    width: 100%;
+    height: 1.5rem;
+    font-size: 0.75rem;
+    display: flex;
+}
+
+.inputfield {
+    padding: 2px;
+    margin: 0.2rem;
+    width: 5.5rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
+    display: flex;
+}
+
+.inputdownbox {
+    margin: 0.2rem;
+    height: 1.2rem;
+    width: 5rem;
+    height: 1.2rem;
+    display: flex;
+}
+
+.message-display {
+    /* margin: 2px; */
+    width: 90%;
+    /* height: 50%; */
+    text-align: center;
+
+    background-color: orange;
+}
+
+.error-message {
+    /* margin: 2px; */
+    text-align: center;
+    background-color: red;
+}
+
+.success-message {
+    background-color: green;
+    font-size: 16px;
+}
+
+.bank-error {
+    display: none;
+}
+
+.typo-error {
+    display: none;
+}
+
+.time-error {
+    display: none;
+}
+
+.time-range-error {
+    display: none;
+}
+
+.invalid-hours-error {
+    display: none;
+}
+
+.short-hours-error {
+    display: none;
+}
+
+.output-box {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 20%;
+    background-color: lightgrey;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.output-time-box {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.calculator {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.calculator-container {
+    width: 50%;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+#calculate-button {
+    width: 100px;
+}
+
+.hours-box {
+    padding: 0.5rem;
+    /* display: block; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+    height: 50%;
+
+}
+
+.hours-container {
+    margin: 0;
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 2%;
+    overflow: hidden;
+
+}
+
+.hours-header {
+    background-color: red;
+    width: 100%;
+    text-align: center;
+
+}
+
+.hours-display-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    overflow: hidden;
+}
+
+.hours-text {
+    width: 100%;
+    height: 100%;
+    resize: none;
+
+}
+
+.hob-button {
+    margin-top: 1%;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4px;
+    background-color: lightblue;
+}
+
+.copy-buttons {
+    opacity: 0;
+}

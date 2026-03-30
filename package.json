@@ -1,0 +1,24 @@
+{
+  "name": "slacalculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "clear && node main.js 2>&1 | tee output.log",
+    "lint": "standard --verbose | snazzy > lint.log",
+    "fix": "standard --fix --verbose | snazzy > fix.log",
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "mocha": "^11.7.5",
+    "snazzy": "^9.0.0",
+    "standard": "^17.1.2"
+  },
+  "dependencies": {
+    "luxon": "^3.7.2"
+  }
+}
