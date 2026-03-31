@@ -1,6 +1,9 @@
 # json data for providers
 src/core/data/providers.json
 
+# logo for business
+assets/images/*.png
+
 # Logs
 logs
 *.log
