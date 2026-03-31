@@ -61,5 +61,15 @@ class ProvidersUI {
 
         this.slaDropDownBox.element.dispatchEvent(new Event('change'));
     }
+    static QRGButton(){
+
+    const qrgButton = document.querySelector('.qrg-button');
+
+    qrgButton.addEventListener('click', () => {
+        
+        const windowFeatures = 'width=960,height=880,resizable=yes,scrollbars=yes,status=yes';
+        window.open('./assets/qrg.pdf', 'qrgWindow', windowFeatures);
+    });
+}
 }
 export { ProvidersUI }

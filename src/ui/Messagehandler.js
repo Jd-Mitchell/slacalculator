@@ -33,6 +33,7 @@ class MessageDisplay {
         this.createMessageBox();
         this.createMessage(message);
     }
+    
 }
 
 export { MessageDisplay };

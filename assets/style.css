@@ -5,6 +5,7 @@
     font-size: 0.85rem;
 }
 
+
 .container {
     width: 100vw;
     height: 100vh;
@@ -15,14 +16,15 @@
     align-items: center;
     margin-left: auto;
     margin-right: auto;
+    border: 4px solid white;
 
 }
 
 .main {
     /* width: 85vw;
     height: calc(85vw * (800/500)); */
-    width: 500px;
-    height: 750px;
+    width: 100%;
+    height: 100%;
     /* max-width: 500px;
     max-height: 800px; */
     /* width: 600px;
@@ -32,17 +34,18 @@
     flex-direction: column;
     justify-content: flex-start;
     border: 4px solid black;
-    border-radius: 1rem;
-    overflow: hidden;
-    border: 3px solid black;
-    border-radius: 2cap;
-    box-shadow: 10px 15px 5px -2px
+    /* border-radius: 1rem; */
+    /* overflow: hidden; */
+    /* border: 3px solid black; */
+    /* border-radius: 2cap; */
+    /* box-shadow: 10px 15px 5px -2px */
 }
 
 .header {
     /* margin: 0 auto;
     padding: 2rem;
     width: 100%; */
+    padding: 1rem;
     width: 100%;
     background-color: white;
     width: 100%;
@@ -50,6 +53,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  /
 }
 
 .imagebox {
@@ -88,7 +92,9 @@
     justify-content: space-around;
     width: 100%;
     height: 6%;
-    background-color: grey;
+   
+    background-color: lightsteelblue;
+   
 }
 
 .inputbox {
@@ -99,17 +105,18 @@
     background-color: lightgrey;
     overflow: hidden;
     position: relative;
+   
 }
 
 .sla {
     display: block;
-    width: 25%;
+    width: 30%;
     height: 100%;
 }
 .sla-dropdowns {
     width: 90%;
     /* height: 10%; */
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 .qrg-box {
@@ -139,7 +146,7 @@
     width: 100%;
     height: 100%;
     border: 1px solid black;
-    border-radius: 2%;
+    /* border-radius: 2%; */
     overflow: hidden;
 }
 
@@ -208,7 +215,6 @@
 }
 
 .drop-down {
-    /* padding: 2px; */
     margin-bottom: 0.5rem;
     width: 100%;
     height: 1.5rem;
@@ -234,12 +240,9 @@
 }
 
 .message-display {
-    /* margin: 2px; */
     width: 90%;
-    /* height: 50%; */
     text-align: center;
 
-    background-color: orange;
 }
 
 .error-message {
@@ -251,30 +254,6 @@
 .success-message {
     background-color: green;
     font-size: 16px;
-}
-
-.bank-error {
-    display: none;
-}
-
-.typo-error {
-    display: none;
-}
-
-.time-error {
-    display: none;
-}
-
-.time-range-error {
-    display: none;
-}
-
-.invalid-hours-error {
-    display: none;
-}
-
-.short-hours-error {
-    display: none;
 }
 
 .output-box {
@@ -303,7 +282,6 @@
     height: 10%;
     display: flex;
     justify-content: center;
-
 }
 
 .calculator-container {
@@ -325,11 +303,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-
     width: 100%;
     height: 50%;
-
-}
+   }
 
 .hours-container {
     margin: 0;
@@ -340,7 +316,7 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    border-radius: 2%;
+    /* border-radius: 2%; */
     overflow: hidden;
 
 }
@@ -349,6 +325,7 @@
     background-color: red;
     width: 100%;
     text-align: center;
+    
 
 }
 
