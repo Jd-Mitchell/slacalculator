@@ -4,8 +4,8 @@ class Version {
 
     static state = {
         version: '2.0.0',
-        build: 1,
-        isDev: false
+        build: 2,
+        isDev: true
     }
 
     static versionDisplay() {
