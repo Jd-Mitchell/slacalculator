@@ -116,13 +116,20 @@ class HoursUI {
         if (keys.length > 1) {
             console.log('Wake up, time to die!');
             UICreator.removeElement(this.state.hoursBlockElements[block].operatingInputBox.element.id);
+            console.log(this.state.hoursBlockElements[block])
             delete this.state.hoursBlockElements[block];
+            delete this.state.hoursBlockDetails[block]
+            console.log(this.state.hoursBLockElements)
+            console.log(this.state.hoursBlockDetails)
         } else {
             console.log('there can only be one!');
             UICreator.removeElement(this.state.hoursBlockElements[block].operatingInputBox.element.id);
             delete this.state.hoursBlockElements[block];
+            delete this.state.hoursBlockDetails[block]
+            console.log(this.state.hoursBlockDetails)
             this.createHoursBlock();
         }
+        
     }
     static getHoursBlock() {
         // const result = {};

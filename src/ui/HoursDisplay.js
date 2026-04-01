@@ -2,7 +2,7 @@ import { HoursUI } from './HoursUI.js';
 
 class HoursDisplay {
     static state = {
-        hoursText: null
+        hoursText: null,
     };
 
     static hoursDisplay() {
@@ -39,29 +39,35 @@ class HoursDisplay {
             if (displayList[i].opening === 'CLOSED') {
                 console.log('CLOSED!');
                 if (displayList[i].dayFrom === displayList[i].dayTo) {
-                    this.state.hoursText.value += `${dayFrom} - CLOSED\n`;
+                    this.state.hoursText.value += `${dayFrom} CLOSED\n`;
                 } else {
                     this.state.hoursText.value += `${dayFrom} - ${dayTo} CLOSED\n `;
                 }
-            } else if (displayList[i].dayTo > displayList[i].dayFrom) {
-                this.state.hoursText.value += `${displayList[i].opening} - ${displayList[i].closing} ${dayFrom} - ${dayTo}\n`;
-            } else if (displayList[i].dayFrom > displayList[i].dayTo) {
-                this.state.hoursText.value += `${displayList[i].opening} - ${displayList[i].closing} ${dayFrom} - ${dayTo}\n`;
+            } else if (displayList[i].opening !== 'CLOSED') {
+                console.log('NOT CLOSED!');
+
+                if (displayList[i].dayTo > displayList[i].dayFrom) {
+                    this.state.hoursText.value += `${displayList[i].opening} - ${displayList[i].closing} ${dayFrom} - ${dayTo}\n`;
+                } else if (displayList[i].dayFrom > displayList[i].dayTo) {
+                    this.state.hoursText.value += `${displayList[i].opening} - ${displayList[i].closing} ${dayFrom} - ${dayTo}\n`;
+                } else if (displayList[i].dayTo === displayList[i].dayTo) {
+                    this.state.hoursText.value += `${displayList[i].opening} - ${displayList[i].closing} ${dayTo}\n`
+                }
             }
         }
-        this.copyHoursButton()
         this.state.hoursText.value = this.state.hoursText.value.trim();
+        this.copyHoursButton();
     }
-    static copyHoursButton(){
-        const copyButton = document.querySelector('#copy-hob-button')
-        copyButton.disabled = false
-        copyButton.style.opacity = 1
+    static copyHoursButton() {
+        const copyButton = document.querySelector('#copy-hob-button');
+        copyButton.disabled = false;
+        copyButton.style.opacity = 1;
         copyButton.addEventListener('click', () => {
-            navigator.clipboard.writeText(this.state.hoursText.value)
-            .then(() => {})
-            .catch((error => {}))
-        })
-
+            navigator.clipboard
+                .writeText(this.state.hoursText.value)
+                .then(() => {})
+                .catch((error) => {});
+        });
     }
 }
 
