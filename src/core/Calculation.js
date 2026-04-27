@@ -53,6 +53,7 @@ class Calculation {
         return this.checkClosed(hours, today, timeKeeper)
       }
     }
+    return this.checkDay(hours, timeKeeper) 
   }
 
   static checkClosed (hours, today, timeKeeper) {
@@ -70,8 +71,9 @@ class Calculation {
         hour: 0,
         minute: 0
       })
-      this.checkDay(hours, timeKeeper)
+      return this.checkDay(hours, timeKeeper)
     }
+
   }
 
   static checkHours (hours, today, timeKeeper) {
@@ -105,7 +107,7 @@ class Calculation {
     switch (true) {
       case timeKeeper.currentDate.hour < openCloseHours.open.hour || timeKeeper.currentDate.hour > openCloseHours.close.hour || (timeKeeper.currentDate.hour === openCloseHours.close.hour && timeKeeper.currentDate.minute >= openCloseHours.close.minute):
         console.log('Outside of Hours!')
-        this.handleOutsideHours(hours, openCloseHours, timeKeeper)
+        return this.handleOutsideHours(hours, openCloseHours, timeKeeper)
         break
       default:
         console.log('inside of hours!')
@@ -114,10 +116,10 @@ class Calculation {
           if (timeKeeper.isCalculated === false) {
             console.log('Not Calculated!')
             this.calculate(timeKeeper)
-            this.checkDay(hours, timeKeeper)
+            return this.checkDay(hours, timeKeeper)
           } else {
             console.log('Calculated!')
-            console.log(timeKeeper.currentDate.toString())
+            // console.log(timeKeeper.currentDate.toString())
             
           }
         } else {
@@ -132,8 +134,10 @@ class Calculation {
             ? hoursPlusSLA
             : closingHours
 
-          console.log(timeKeeper.currentDate.toString())
+        //   console.log(timeKeeper.currentDate.toString())
         }
+        console.log(timeKeeper.currentDate.toString())
+        console.log(timeKeeper)
         return timeKeeper
     }
   }
@@ -142,7 +146,7 @@ class Calculation {
     switch (true) {
       case timeKeeper.currentDate.hour < openCloseHours.open.hour:
         console.log('Before Hours!')
-        timeKeeper.isCalculated === false
+        return timeKeeper.isCalculated === false
           ? (console.log('not Calculated!'),
             (timeKeeper.currentDate = timeKeeper.currentDate.set({
               hour: openCloseHours.open.hour,
@@ -169,7 +173,7 @@ class Calculation {
           hour: 0,
           minute: 0
         })
-        this.checkDay(hours, timeKeeper)
+        return this.checkDay(hours, timeKeeper)
     }
   }
 
