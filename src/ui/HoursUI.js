@@ -1,14 +1,75 @@
 import { BusinessHours } from '../core/BusinessHours.js'
-import { UICreator } from './UICreator.js' 
+import { CalculationUI } from './CalculationUI.js'
+import { UICreator } from './UICreator.js'
 
 class HoursUI {
     static state = {
         hoursBlockIdentifier: 0,
         hoursBlockElements: {},
         hoursBlockDetails: {},
-    }         
+    }
     static getDaysList() {
-        return ['MON','TUE','WED','THU','FRI','SAT','SUN'].map((day, index) => ({name: day, value: index + 1}))
+        return ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day, index) => ({ name: day, value: index + 1 }))
+    }
+    static create247Button() {
+        console.log('2 Four 7 Button!')
+        const container = document.querySelector('.operating-hours-inner');
+        const buttonContainer = UICreator.createNewElement(
+            container,
+            'div',
+            ['two-four-seven-container'],
+            [],
+            {},
+            {},
+            '',
+        )
+        const twoFourSevenButton = UICreator.createNewElement(
+            buttonContainer.element,
+            'button',
+            ['two-four-seven-button'],
+            [],
+            {},
+            {
+                click: (e) => {
+                    this.set247()
+                }
+            },
+            '24 Hours',
+        )
+    }
+
+    static set247() {
+        console.log('24 button touched')
+
+        const elementBlocks = this.state.hoursBlockElements
+        const oldElements = Object.values(elementBlocks)
+        console.log(elementBlocks)
+        oldElements.forEach((block) => {
+            console.log(block)
+            if (block.removeButton) {
+                console.log(block.removeButton.element)
+                block.removeButton.element.click()
+            }
+        })
+        console.log(this.state.hoursBlockElements)
+        console.log(elementBlocks)
+        const newElements = Object.values(elementBlocks)
+        console.log(newElements)
+        console.log('element left over:')
+        console.log(newElements[0].selectFrom.element.value)
+        console.log(newElements[0].selectTo.element)
+
+        newElements[0].selectTo.element.value = '7'
+        newElements[0].openingInput.element.value = '24/7'
+        CalculationUI.lockHoursUI()
+        // CalculationUI.state.calculateButton.click()
+    }
+
+    static createHoursContainer() {
+        const outerContainer = document.querySelector('.operating-hours-inner')
+        this.state.operatingInputContainer = UICreator.createNewElement(outerContainer, 'div', ['operating-input-container'], [], {}, {}, '')
+
+        console.log(this.state.operatingInputContainer);
     }
 
     static createHoursBlock() {
@@ -19,11 +80,9 @@ class HoursUI {
         console.log(this.state.hoursBlockDetails);
 
         // element creation
-        const container = document.querySelector('.operating-input-container');
+        
 
-        console.log(container);
-
-        currentBlock.operatingInputBox = UICreator.createNewElement(container, 'div', ['operating-input-box'], [`operating-input-box${blockName}`], {}, {}, '');
+        currentBlock.operatingInputBox = UICreator.createNewElement(this.state.operatingInputContainer.element, 'div', ['operating-input-box'], [`operating-input-box${blockName}`], {}, {}, '');
         console.log(currentBlock.operatingInputBox.element);
         currentBlock.operatingInput = UICreator.createNewElement(currentBlock.operatingInputBox.element, 'div', ['operating-input'], [], {}, {}, '');
         console.log(currentBlock.operatingInput.element);
@@ -107,6 +166,8 @@ class HoursUI {
         this.state.hoursBlockIdentifier++;
     }
 
+
+
     static removeHoursBlock(data) {
         console.log(this.state.hoursBlockElements);
         const keys = Object.keys(this.state.hoursBlockElements);
@@ -123,13 +184,14 @@ class HoursUI {
             console.log(this.state.hoursBlockDetails)
         } else {
             console.log('there can only be one!');
+            console.log(this.state.hoursBlockElements)
             UICreator.removeElement(this.state.hoursBlockElements[block].operatingInputBox.element.id);
             delete this.state.hoursBlockElements[block];
             delete this.state.hoursBlockDetails[block]
             console.log(this.state.hoursBlockDetails)
             this.createHoursBlock();
         }
-        
+
     }
     static getHoursBlock() {
         // const result = {};
@@ -138,15 +200,15 @@ class HoursUI {
         }
 
         this.state.hoursObject = Object.values(this.state.hoursBlockDetails).map((block) => {
-                return {
-                    dayFrom: block.dayFrom,
-                    dayTo: block.dayTo,
-                    openingTime: block.openingText.element.value.toUpperCase(),
-                    closingTime: block.closingText.element.value.toUpperCase(),
-                };
-            })
+            return {
+                dayFrom: block.dayFrom,
+                dayTo: block.dayTo,
+                openingTime: block.openingText.element.value.toUpperCase(),
+                closingTime: block.closingText.element.value.toUpperCase(),
+            };
+        })
     }
-    
+
     static addMoreButtonListener() {
         const addMoreButton = document.querySelector('#more-button');
         addMoreButton.addEventListener('click', () => {

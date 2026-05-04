@@ -54,6 +54,7 @@ class CalculationUI {
             console.log(this.state.calculationResult.currentDate.toString())
             TimeUI.displayTime('calculation', this.state.calculationResult.currentDate)
             this.lockHoursUI()
+            this.disableCalculateButton()
             HoursDisplay.hoursDisplay()
             
         } catch (error) {
@@ -80,6 +81,9 @@ class CalculationUI {
     static lockHoursUI(){
         this.state.overlay = document.querySelector('#overlay')
         this.state.overlay.style.zIndex = '2'
+        
+    }
+    static disableCalculateButton() {
         this.state.calculateButton.disabled = true
     }
 }

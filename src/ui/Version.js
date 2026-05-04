@@ -3,9 +3,9 @@ import { UICreator } from './UICreator.js'
 class Version {
 
     static state = {
-        version: '2.0.1',
-        build: 3,
-        isDev: false
+        version: '2.0.2',
+        build: 4,
+        isDev: true
     }
 
     static versionDisplay() {

@@ -53,7 +53,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  /
+    /
 }
 
 .imagebox {
@@ -92,9 +92,9 @@
     justify-content: space-around;
     width: 100%;
     height: 6%;
-   
+
     background-color: lightsteelblue;
-   
+
 }
 
 .inputbox {
@@ -105,7 +105,7 @@
     background-color: lightgrey;
     overflow: hidden;
     position: relative;
-   
+
 }
 
 .sla {
@@ -113,6 +113,7 @@
     width: 30%;
     height: 100%;
 }
+
 .sla-dropdowns {
     width: 90%;
     /* height: 10%; */
@@ -129,15 +130,17 @@
     align-items: center;
     text-align: center;
 }
+
 .qrg-button {
     display: block;
     width: 100%;
     height: 100%;
 }
-.qrg-button a{
-    text-decoration: none
 
+.qrg-button a {
+    text-decoration: none
 }
+
 .operating-hours-box {
     background-color: white;
     display: flex;
@@ -177,6 +180,21 @@
     width: 100%;
     flex: 1;
     overflow-y: auto;
+    /* background-color: red */
+}
+
+.two-four-seven-container {
+    width: 100%;
+    height: 15%;
+    padding: 1%;
+    display: flex;
+    justify-content: center;
+    /* background-color: orange; */
+
+}
+
+.two-four-seven-button {
+    height: 90%; 
 }
 
 .operating-input-box {
@@ -187,7 +205,7 @@
 }
 
 .operating-input {
-    /* background-color: blue; */
+    /* background-color: red; */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -305,7 +323,7 @@
     justify-content: center;
     width: 100%;
     height: 50%;
-   }
+}
 
 .hours-container {
     margin: 0;
@@ -325,7 +343,7 @@
     background-color: red;
     width: 100%;
     text-align: center;
-    
+
 
 }
 

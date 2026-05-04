@@ -52,10 +52,20 @@ class HoursInput {
             if ((object.openingTime === 'CLOSED' && object.closingTime === 'CLOSED') || (object.openingTime === 'CLOSED'&& object.closingTime ==='')) {
                 return true;
             }
+            if ((object.openingTime === '24/7' && object.closingTime === '24/7') || (object.openingTime === '24/7'&& object.closingTime ==='')) {
+                return true;
+            }
+             if ((object.openingTime === '24/7' && object.closingTime === '24/7') || (object.openingTime === '24/7'&& object.closingTime ==='')) {
+                return true;
+            }
             if ((object.openingTime === 'CLOSED' && object.closingTime !== 'CLOSED' && object.closingTime !== '') || (object.openingTime !== 'CLOSED' && object.closingTime === 'CLOSED')) {
                 Message.throwError(this, 'INCORRECT_CLOSED_USAGE', hoursObjects);
             }
-            if (object.openingTime !== 'CLOSED' && (/[^0-9:]/.test(object.openingTime) || (object.openingTime !== 'CLOSED' && /[^0-9:]/.test(object.closingTime)))) {
+            if ((object.openingTime === '24/7' && object.closingTime !== '24/7' && object.closingTime !== '') || (object.openingTime !== '24/7' && object.closingTime === '24/7')) {
+                Message.throwError(this, 'INCORRECT_24/7_USAGE', hoursObjects);
+            }
+
+            if (object.openingTime !== 'CLOSED' && (/[^0-9:]/.test(object.openingTime) || ((object.openingTime !== 'CLOSED' && object.openingTime !== '24-7' && /[^0-9:]/.test(object.closingTime))))) {
                 Message.throwError(this, 'NO_LETTERS_ALLOWED', hoursObjects);
             }
             if (object.openingTime === '' || object.closingTime === '') {
@@ -66,7 +76,7 @@ class HoursInput {
                 Message.throwError(this, 'INCORRECT_NUMBER_FORMAT', hoursObjects);
             }
 
-            if (object.openingTime.toUpperCase() !== 'CLOSED' && !/[^0-9:]/.test(object.openingTime)) {
+            if (object.openingTime !== 'CLOSED' && !/[^0-9:]/.test(object.openingTime)) {
                 const opening = splitTime(object.openingTime);
                 const closing = splitTime(object.closingTime);
                 if (!(opening.hour >= 0 && opening.hour < 24) || !(opening.minute >= 0 && opening.minute < 60) || !(closing.hour >= 0 && closing.hour < 24) || !(closing.minute >= 0 && closing.minute < 60)) {
@@ -114,6 +124,11 @@ class HoursInput {
             code: 'INCORRECT_CLOSED_USAGE',
             name: 'Typo: "CLOSED" used incorrectly.',
             message: '"CLOSED" must either be in the opening field and nothing in the closing field, OR "CLOSED" in both fields.',
+        },
+         {
+            code: 'INCORRECT_24/7_USAGE',
+            name: 'Typo: "24/7" used incorrectly.',
+            message: '"24/7" must either be in the opening field and nothing in the closing field, OR "24/7" in both fields.',
         },
 
         {
