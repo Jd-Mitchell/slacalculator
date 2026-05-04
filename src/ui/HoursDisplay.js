@@ -43,7 +43,11 @@ class HoursDisplay {
                 } else {
                     this.state.hoursText.value += `${dayFrom} - ${dayTo} CLOSED\n `;
                 }
-            } else if (displayList[i].opening !== 'CLOSED') {
+            } else if (displayList[i].opening === '24/7'){
+                console.log('TWO FOUR SEVEN!')
+                 this.state.hoursText.value += ` 24/7\n`;
+
+            } else {
                 console.log('NOT CLOSED!');
 
                 if (displayList[i].dayTo > displayList[i].dayFrom) {

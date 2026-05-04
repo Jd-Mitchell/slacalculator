@@ -10,6 +10,8 @@ import { Version } from './src/ui/Version.js'
 StatesUI.setupStatesDropdown()
 ProvidersUI.setupProviderDropdowns()
 ProvidersUI.QRGButton()
+HoursUI.create247Button()
+HoursUI.createHoursContainer()
 HoursUI.createHoursBlock()
 HoursUI.addMoreButtonListener()
 CalculationUI.calculateButtonListener()

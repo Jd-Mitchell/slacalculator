@@ -55,24 +55,30 @@ class BusinessHours {
                     Message.throwError(this, 'NO_HOURS_INPUT', hours)
                   
                 }
+                console.log(hours)
                 hours.forEach((day) => {
                     if (day.opening !== 'CLOSED') {
-                        const opening = splitTime(day.opening);
-                        const closing = splitTime(day.closing);
                         const techStart = splitTime(provider.techStart)
                         const techFinish = splitTime(provider.techFinish)
-                        if (opening.hour > closing.hour && (closing.hour > techStart.hour)){
-                           Message.throwError(this, 'OUT_OF_BOUNDS', hours)  
-                        } 
-                        if (
-                            (opening.hour >= techFinish.hour && closing.hour <= techStart.hour)||
-                            (opening.hour < techStart.hour && closing.hour <= techStart.hour)
-                        ){
-                            Message.throwError(this, 'OUT_OF_TECH_BOUNDS', hours)                           
+                        if (day.opening !== '24/7'){
+
+                            const opening = splitTime(day.opening);
+                            const closing = splitTime(day.closing);
+                            console.log(opening)
+                            console.log(closing)
+                           
+                            if (opening.hour > closing.hour && (closing.hour > techStart.hour)){
+                               Message.throwError(this, 'OUT_OF_BOUNDS', hours)  
+                            } 
+                            if (
+                                (opening.hour >= techFinish.hour && closing.hour <= techStart.hour)||
+                                (opening.hour < techStart.hour && closing.hour <= techStart.hour)
+                            ){
+                                Message.throwError(this, 'OUT_OF_TECH_BOUNDS', hours)                           
+                            }
                         }
                     }
                 });
-                
                 
             });
             
