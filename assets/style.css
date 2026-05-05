@@ -53,7 +53,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /
 }
 
 .imagebox {
@@ -269,10 +268,21 @@
     background-color: red;
 }
 
+/* .error-message p, .success-message p {
+     font-weight: bold
+} */
+
 .success-message {
     background-color: green;
-    font-size: 16px;
 }
+/* .error-message p {
+    font-size: 0.7rem;
+} */
+
+.success-message p {
+    font-size: 1rem;
+}
+
 
 .output-box {
     padding: 1rem;
@@ -343,6 +353,7 @@
     background-color: red;
     width: 100%;
     text-align: center;
+   
 
 
 }

@@ -10,11 +10,12 @@ class MessageDisplay {
     static createMessage(message) {
         if (message.status === 'SUCCESS') {
             this.messageBoxContainer.element.classList.add('success-message');
-            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, 'SUCCESS!');
+            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'h3', [], [], {}, {}, 'SUCCESS!');
         } else {
             this.messageBoxContainer.element.classList.add('error-message');
-            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, 'ERROR:');
-            const messageName = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, message.name);
+            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'h2', [], [], {}, {}, 'ERROR:');
+            const headingBr = UICreator.createNewElement(this.messageBoxContainer.element, 'br', [], [], {}, {}, '');
+            const messageName = UICreator.createNewElement(this.messageBoxContainer.element, 'h4', [], [], {}, {}, message.name);
             const messageBr = UICreator.createNewElement(this.messageBoxContainer.element, 'br', [], [], {}, {}, '');
             const messageMain = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, message.message);
         }
