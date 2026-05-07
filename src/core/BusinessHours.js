@@ -76,9 +76,14 @@ class BusinessHours {
                             ){
                                 Message.throwError(this, 'OUT_OF_TECH_BOUNDS', hours)                           
                             }
+                            if (closing.hour >= 0 && closing.hour < techStart.hour){
+                                console.log('After midnight!')
+                                day.closing = '2400'
+                            }
                         }
                     }
                 });
+                  console.log(hours)
                 
             });
             
