@@ -104,7 +104,7 @@ class BusinessHours {
 
 
     }
-    static errors = [
+     static errors = [
         {
             code: 'PROVIDER_NOT_SELECTED',
             name: 'Procedure: Provider blank',
@@ -118,12 +118,12 @@ class BusinessHours {
          {
             code: 'OUT_OF_BOUNDS',
             name: 'Out Of Bounds: Opening later than closing',
-            message: 'Opening hour must be more than closing hour',
+            message: 'Opening hour must be less than closing hour',
         },
          {
             code: 'OUT_OF_TECH_BOUNDS',
-            name: 'Out Of Tech Bounds: Opening and closing hours out of Technician times',
-            message: 'Opening and closing hours must be within technician operating hours',
+            name: 'Out Of Tech Bounds: Operating hours outside of Tech hours',
+            message: 'Operating hours never fall within tech start and finish times.',
         },
     ]
 }
