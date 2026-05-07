@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA CALCULATOR 2.0!</title>
+    <link rel="icon" type = images/x-icon href ="./assets/images/icon.ico">
+    <link rel="stylesheet" href="./assets/style.css">
+
+<script src="./vendor/luxon.js"></script>
+    <script type="module" src="./main.js" defer></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <main class="main">
+            <header class="header">
+                <div class="imagebox">
+                    <img src="./assets/images/ingenico.svg" alt="" class="image">
+                </div>
+                <div class="heading-container">
+                    <h1>SLA Calculator!</h1>
+                </div>
+
+            </header>
+
+            <section class="display-box">
+                <p>Current Time</p>
+                <input type="text" name="day" id="current-day" class="inputfield" placeholder="day" readonly>
+                <input type="text" name="current-date" id="current-date" class="inputfield" placeholder="date" readonly>
+                <input type="text" name="current-time" id="current-time" class="inputfield" placeholder="time" readonly>
+                <select name="state" id="state" class="inputfield">
+
+                </select>
+            </section>
+            <section class="inputbox">
+                <div class="sla">
+                    <p>SLA:</p>
+                    <div class="sla-dropdowns">
+
+                    </div>
+                    <div class="qrg-box">
+                        <button class="qrg-button">Quick Reference Guide</button>
+                    </div>
+                    <div class="message-display">
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="operating-hours-box">
+
+                    <div class="operating-hours-inner">
+                        <div class="hours">
+                            <p>Operating hours:</p>
+                        </div>
+                        
+                    </div>
+
+                    <div class="button-box"><button id="more-button">Add More</button></div>
+                    <div class="overlay" id="overlay"></div>
+
+                </div>
+
+            </section>
+            <section class="calculator">
+                <div class="calculator-container">
+                    <button id="calculate-button" class="calc-buttons">Calculate</button>
+                    <button id="reset-button">Reset</button>
+                </div>
+            </section>
+
+            <section class="output-box">
+
+                <div id="output-container" class="output-time-box">
+                    <p>Calculated SLA:</p>
+                    <input type="text" name="calculated-day" id="calculated-day" class="inputfield" placeholder="Day"
+                        readonly>
+                    <input type="text" name="calculated-date" id="calculated-date" class="inputfield" placeholder="Date"
+                        readonly>
+                    <input type="text" name="calculated-time" id="calculated-time" class="inputfield" placeholder="Time"
+                        readonly>
+
+                </div>
+
+                <div class="calc-button-container">
+                    <button id="copy-date-button" disabled class="copy-buttons">Copy Date</button>
+                    <button id="copy-time-button" disabled class="copy-buttons">Copy Time</button>
+                </div>
+
+
+            </section>
+
+            <section class="hours-box">
+
+                <div class="hours-container">
+                    <div class="hours-header">
+                        <h3>Business Hours:</h3>
+                    </div>
+                    <div class="hours-display-box">
+                        <textarea name="hours-text" id="hours-text" class="hours-text" disabled>
+
+                        </textarea>
+
+                    </div>
+
+                </div>
+                <button id="copy-hob-button" disabled class="hob-button copy-buttons">Copy</button>
+
+            </section>
+
+            <footer id="app-footer">
+                <p id="version"></p>
+                <p>Copyright © 2026 JDMCreative</p>
+                <p>Created by JD Mitchell</p>
+            </footer>
+        </main>
+
+    </div>
+ 
+</body>
+
+</html>
