@@ -4,6 +4,9 @@ src/core/data/providers.json
 # logo for business
 assets/images/*.png
 
+# Quick Reference Guide
+assets/qrg.pdf
+
 # Logs
 logs
 *.log

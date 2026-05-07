@@ -122,7 +122,7 @@ class BusinessHours {
         },
          {
             code: 'OUT_OF_TECH_BOUNDS',
-            name: 'Out Of Technician Bounds : Opening and closing hours out of Technician times',
+            name: 'Out Of Tech Bounds: Opening and closing hours out of Technician times',
             message: 'Opening and closing hours must be within technician operating hours',
         },
     ]
