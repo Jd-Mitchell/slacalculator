@@ -1,13 +1,15 @@
 import { splitTime } from './SplitTime.js'
+import { Message } from './Messages.js';
 
 class Calculation {
     // static timeKeeper
-    constructor({ currentDate, techHours, slaTime, initialSLA, failsafe, failsafeSLA, isCalculated, timeDifference }) {
+    constructor({ currentDate, techHours, slaTime, initialSLA, failsafe, failCount, failsafeSLA, isCalculated, timeDifference }) {
         this.currentDate = currentDate
         this.techHours = techHours
         this.slaTime = slaTime
         this.initialSLA = initialSLA
         this.failsafe = failsafe
+        this.failCount = failCount
         this.failsafeSLA = failsafeSLA
         this.isCalculated = isCalculated
         this.timeDifference = timeDifference
@@ -20,9 +22,10 @@ class Calculation {
             currentDate: initialDate,
             techHours: this.getTechHours(selectedProvider),
             slaTime: selectedSLA,
-            initialSLA,
+            intiailSLA: initialSLA,
             failsafe: false,
-            failsafeSLA,
+            failCount: 0,
+            failsafeSLA: failsafeSLA,
             isCalculated: false,
             timeDifference: 0
         })
@@ -79,16 +82,32 @@ class Calculation {
     static checkHours(hours, today, timeKeeper) {
         console.log('FAIL SAFE:')
         console.log(timeKeeper.failsafeSLA.toString())
+        console.log(timeKeeper.currentDate.toString())
+        console.log(timeKeeper.failCount)
         if (timeKeeper.failsafe === false) {
             if (timeKeeper.currentDate >= timeKeeper.failsafeSLA) {
                 console.log('the date has exceeded upper threshold!')
                 timeKeeper.failsafe = true
+                timeKeeper.failCount++
+                console.log(`FAIL COUNT: ${timeKeeper.failCount}`)
             } else if (
                 (timeKeeper.currentDate.day === timeKeeper.failsafeSLA.day && timeKeeper.currentDate.hour < timeKeeper.failsafeSLA.hour) && timeKeeper.isCalculated === false) {
                 console.log("the date hasn't been calculated yet and the current date is within a day of the failsafe!")
                 timeKeeper.failsafe = true
+                timeKeeper.failCount++
             } else {
                 console.log('failsafe not tripped')
+            }
+        }else if(timeKeeper.currentDate < timeKeeper.failsafeSLA){
+            console.log('no fail!')
+        } else if (timeKeeper.failsafe === true) {
+            console.log('FAILSAFE ENGAGED!')
+            if (timeKeeper.failCount < 2){
+                console.log('loop threshold not met, continue until fail')
+                timeKeeper.failCount++
+            } else {
+
+            Message.throwError(this, 'LOOP_FAILURE', hours)
             }
         }
         const operatingHours = {}
@@ -149,6 +168,9 @@ class Calculation {
     }
 
     static handleOutsideHours(hours, openCloseHours, timeKeeper) {
+        if (timeKeeper.failsafe === true){
+            console.log('ERROR! the fail safe has been tripped!')
+        }
         switch (true) {
             case timeKeeper.currentDate.hour < openCloseHours.open.hour:
                 console.log('Before Hours!')
@@ -241,6 +263,15 @@ class Calculation {
         const timeKeeper = this.initialise({ initialDate, selectedProvider, selectedSLA })
         return this.checkDay(hours, timeKeeper)
     }
+    static errors = [
+        {
+            code: 'LOOP_FAILURE',
+            name: 'CALCULATION FAILURE!',
+            message: 'Please copy down the hours you have entered and report it to the developer for testing.',
+        },
+    ]
 }
+
+ 
 
 export { Calculation }
