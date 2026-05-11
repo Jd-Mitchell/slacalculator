@@ -3,8 +3,8 @@ import { UICreator } from './UICreator.js'
 class Version {
 
     static state = {
-        version: '2.0.3',
-        build: 7,
+        version: '2.0.4',
+        build: 8,
         isDev: true
     }
 
