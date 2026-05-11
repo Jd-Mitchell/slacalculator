@@ -98,26 +98,26 @@ class Calculation {
             } else {
                 console.log('failsafe not tripped')
             }
-        }else if(timeKeeper.currentDate < timeKeeper.failsafeSLA){
+        } else if (timeKeeper.currentDate < timeKeeper.failsafeSLA) {
             console.log('no fail!')
         } else if (timeKeeper.failsafe === true) {
             console.log('FAILSAFE ENGAGED!')
-            if (timeKeeper.failCount < 2){
+            if (timeKeeper.failCount < 2) {
                 console.log('loop threshold not met, continue until fail')
                 timeKeeper.failCount++
             } else {
 
-            Message.throwError(this, 'LOOP_FAILURE', hours)
+                Message.throwError(this, 'LOOP_FAILURE', hours)
             }
         }
         const operatingHours = {}
         if (hours[today].opening === '24/7') {
             console.log('WE NEVER CLOSE!')
-                operatingHours.open = timeKeeper.techHours.start,
-                operatingHours.close = timeKeeper.techHours.finish            
+            operatingHours.open = timeKeeper.techHours.start,
+                operatingHours.close = timeKeeper.techHours.finish
         } else {
             console.log('WE CLOSE!')
-                operatingHours.open = splitTime(hours[today].opening),
+            operatingHours.open = splitTime(hours[today].opening),
                 operatingHours.close = splitTime(hours[today].closing)
         }
 
@@ -128,7 +128,6 @@ class Calculation {
             close: this.getCurrentHours(timeKeeper.techHours.finish, operatingHours.close, timeKeeper)
         }
         console.log(openCloseHours)
-        console.log(timeKeeper.currentDate.hour)
         switch (true) {
             case timeKeeper.currentDate.hour < openCloseHours.open.hour || timeKeeper.currentDate.hour > openCloseHours.close.hour || (timeKeeper.currentDate.hour === openCloseHours.close.hour && timeKeeper.currentDate.minute >= openCloseHours.close.minute):
                 console.log('Outside of Hours!')
@@ -144,22 +143,29 @@ class Calculation {
                         return this.checkDay(hours, timeKeeper)
                     } else {
                         console.log('Calculated!')
-                        // console.log(timeKeeper.currentDate.toString())
 
                     }
                 } else {
                     console.log('failsafe has been tripped!')
-                    const hoursPlusSLA = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime })
-                    console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`)
-                    console.log(hoursPlusSLA)
+                    if (timeKeeper.isCalculated === true) {
+                        console.log('Calculated!')
+                        timeKeeper.timeDifference = timeKeeper.currentDate.hour * 60 + timeKeeper.currentDate.minute - (openCloseHours.close.hour * 60 + openCloseHours.close.minute)
+                        console.log(timeKeeper.timeDifference)
+                    }
+                    else {
+                        console.log('Was not calculated!')
+                        const hoursPlusSLA = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime })
+                        console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`)
+                        console.log(hoursPlusSLA)
+                        const closingHours = timeKeeper.currentDate.set(openCloseHours.close)
+    
+                        timeKeeper.currentDate = (timeKeeper.slaTime <= 8 && hoursPlusSLA <= closingHours)
+                            ? hoursPlusSLA
+                            : closingHours
+    
+                        //   console.log(timeKeeper.currentDate.toString())
+                    }
 
-                    const closingHours = timeKeeper.currentDate.set(openCloseHours.close)
-
-                    timeKeeper.currentDate = (timeKeeper.slaTime <= 8 && hoursPlusSLA <= closingHours)
-                        ? hoursPlusSLA
-                        : closingHours
-
-                    //   console.log(timeKeeper.currentDate.toString())
                 }
                 console.log(timeKeeper.currentDate.toString())
                 console.log(timeKeeper)
@@ -168,7 +174,7 @@ class Calculation {
     }
 
     static handleOutsideHours(hours, openCloseHours, timeKeeper) {
-        if (timeKeeper.failsafe === true){
+        if (timeKeeper.failsafe === true) {
             console.log('ERROR! the fail safe has been tripped!')
         }
         switch (true) {
@@ -272,6 +278,6 @@ class Calculation {
     ]
 }
 
- 
+
 
 export { Calculation }
