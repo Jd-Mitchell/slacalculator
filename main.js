@@ -25,3 +25,4 @@ setInterval(() => {
 }, 1000)
 
 Version.versionDisplay()
+Version.copyrightDisplay()
