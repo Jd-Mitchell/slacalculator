@@ -49,7 +49,7 @@ class ProvidersUI {
             },
             '',
         );
-
+        console.log(provider)
         const slaOptions = Providers.getSlaOptions(provider);
         console.log(slaOptions);
         if (this.slaDropDownBox?.element) {

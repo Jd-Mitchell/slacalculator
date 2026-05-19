@@ -83,7 +83,7 @@ class Calculation {
         console.log('FAIL SAFE:')
         console.log(timeKeeper.failsafeSLA.toString())
         console.log(timeKeeper.currentDate.toString())
-        console.log(timeKeeper.failCount)
+        console.log(`fail Count: ${timeKeeper.failCount}`)
         if (timeKeeper.failsafe === false) {
             if (timeKeeper.currentDate >= timeKeeper.failsafeSLA) {
                 console.log('the date has exceeded upper threshold!')
@@ -158,11 +158,11 @@ class Calculation {
                         console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`)
                         console.log(hoursPlusSLA)
                         const closingHours = timeKeeper.currentDate.set(openCloseHours.close)
-    
+
                         timeKeeper.currentDate = (timeKeeper.slaTime <= 8 && hoursPlusSLA <= closingHours)
                             ? hoursPlusSLA
                             : closingHours
-    
+
                         //   console.log(timeKeeper.currentDate.toString())
                     }
 
@@ -175,25 +175,42 @@ class Calculation {
 
     static handleOutsideHours(hours, openCloseHours, timeKeeper) {
         if (timeKeeper.failsafe === true) {
-            console.log('ERROR! the fail safe has been tripped!')
+            console.log('The fail safe has been tripped!')
         }
         switch (true) {
             case timeKeeper.currentDate.hour < openCloseHours.open.hour:
                 console.log('Before Hours!')
-                return timeKeeper.isCalculated === false
-                    ? (console.log('not Calculated!'),
-                        (timeKeeper.currentDate = timeKeeper.currentDate.set({
-                            hour: openCloseHours.open.hour,
-                            minute: openCloseHours.open.minute
-                        })),
-                        this.checkDay(hours, timeKeeper))
-                    : (console.log('Calculated!'),
-                        console.log(timeKeeper.timeDifference),
-                        (timeKeeper.currentDate = timeKeeper.currentDate.set({
-                            hour: openCloseHours.open.hour + Math.floor(timeKeeper.timeDifference / 60),
-                            minute: openCloseHours.open.minute + (timeKeeper.timeDifference % 60)
-                        })),
-                        this.checkDay(hours, timeKeeper))
+
+                timeKeeper.currentDate = timeKeeper.currentDate.set({
+                    hour: openCloseHours.open.hour,
+                    minute: openCloseHours.open.minute,
+
+                })
+
+                console.log(`Failesafe SLA: ${timeKeeper.failsafeSLA.toString()}`)
+                console.log(`Current hours set to: ${timeKeeper.currentDate.toString()}`)
+                if (timeKeeper.currentDate >= timeKeeper.failsafeSLA) {
+                    console.log('The failSafe has been tripped! Setting the time to the opening hours!')
+                    // return
+                    return this.checkDay(hours, timeKeeper)
+
+                } else {
+                    return timeKeeper.isCalculated === false
+                        ? (console.log('not Calculated!'),
+                            (timeKeeper.currentDate = timeKeeper.currentDate.set({
+                                hour: openCloseHours.open.hour,
+                                minute: openCloseHours.open.minute
+                            })),
+                            this.checkDay(hours, timeKeeper))
+                        : (console.log('Calculated!'),
+                            console.log(timeKeeper.timeDifference),
+                            (timeKeeper.currentDate = timeKeeper.currentDate.set({
+                                hour: openCloseHours.open.hour + Math.floor(timeKeeper.timeDifference / 60),
+                                minute: openCloseHours.open.minute + (timeKeeper.timeDifference % 60)
+                            })),
+                            this.checkDay(hours, timeKeeper))
+
+                }
                 break
 
             default:
