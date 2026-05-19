@@ -4,8 +4,10 @@ class Version {
 
     static state = {
         version: '2.0.5',
-        build: 9,
-        isDev: false
+        build: 10,
+        isDev: true,
+        copyright: '2026',
+        vendor: 'JDMCreative'
     }
 
     static versionDisplay() {
@@ -36,7 +38,11 @@ class Version {
             versionElement.textContent = `Ver ${this.state.version}`
         }
 
-    
+    }
+    static copyrightDisplay() {
+        const copyrightElement = document.querySelector('#copyright')
+        copyrightElement.appendChild(document.createTextNode(`Copyright © ${this.state.copyright} ${this.state.vendor}`))
+
     }
 
     
