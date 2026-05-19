@@ -57,28 +57,54 @@ class BusinessHours {
                 }
                 console.log(hours)
                 hours.forEach((day) => {
-                    if (day.opening !== 'CLOSED') {
-                        const techStart = splitTime(provider.techStart)
-                        const techFinish = splitTime(provider.techFinish)
-                        if (day.opening !== '24/7'){
+                    let validatedDay = false
+                    while (validatedDay === false) {
 
-                            const opening = splitTime(day.opening);
-                            const closing = splitTime(day.closing);
-                            console.log(opening)
-                            console.log(closing)
-                           
-                            if (opening.hour > closing.hour && (closing.hour > techStart.hour)){
-                               Message.throwError(this, 'OUT_OF_BOUNDS', hours)  
-                            } 
-                            if (
-                                (opening.hour >= techFinish.hour && closing.hour <= techStart.hour)||
-                                (opening.hour < techStart.hour && closing.hour <= techStart.hour)
-                            ){
-                                Message.throwError(this, 'OUT_OF_TECH_BOUNDS', hours)                           
-                            }
-                            if (closing.hour >= 0 && closing.hour < techStart.hour){
-                                console.log('After midnight!')
-                                day.closing = '2400'
+                        validatedDay = true
+
+                        if (day.opening !== 'CLOSED') {
+                            const techStart = splitTime(provider.techStart)
+                            const techFinish = splitTime(provider.techFinish)
+                            if (day.opening !== '24/7'){
+    
+                                const opening = splitTime(day.opening);
+                                const closing = splitTime(day.closing);
+                                console.log(opening)
+                                console.log(closing)
+    
+                                 if (opening.hour >= 0 && opening.hour < techStart.hour){
+                                    console.log('Before Tech Start time!')
+                                    day.opening = provider.techStart
+                                    console.log(day.opening)
+                                    validatedDay = false
+                                    continue
+                                }
+                                 if ((closing.hour > techFinish.hour) || (closing.hour >= 0 && closing.hour < techStart.hour)){
+                                    console.log('After TechHours!')
+                                    day.closing = provider.techFinish
+                                    console.log(day.closing)
+                                    validatedDay = false
+                                    continue
+                                } else if (closing.hour >= 0 && closing.hour <= techStart.hour){
+                                    console.log('After Midnight!')
+                                    day.closing = '2400'
+                                    console.log(day.closing)
+                                    validatedDay = false
+                                    continue
+                                }
+    
+                               if (opening.hour > closing.hour && (closing.hour > techStart.hour)){
+                                   Message.throwError(this, 'OUT_OF_BOUNDS', hours)  
+                                } 
+                                if (
+                                    (opening.hour >= techFinish.hour && closing.hour <= techStart.hour)||
+                                    (opening.hour < techStart.hour && closing.hour <= techStart.hour) ||
+                                    (opening.hour >= techFinish.hour && closing.hour >= techFinish.hour)||
+                                    (opening.hour >= closing.hour && closing.hour <= techStart.hour)
+                                ){
+                                    Message.throwError(this, 'OUT_OF_TECH_BOUNDS', hours)                           
+                                }
+                            //    vaildatedDay = true
                             }
                         }
                     }

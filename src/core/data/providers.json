@@ -12,8 +12,8 @@
     },
     {
         "name": "Garry's IT",
-        "techStart": "0800",
-        "techFinish": "1800",
+        "techStart": "0000",
+        "techFinish": "2400",
         "slas": {
             "metro": 4,
             "country": 24,
