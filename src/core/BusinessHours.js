@@ -3,6 +3,8 @@ import { Message } from './Messages.js';
 import { Providers } from './Providers.js';
 import { HandleTime } from './Util.js';
 
+
+
 class BusinessHours {
     static #hours;
     constructor(day, opening, closing) {

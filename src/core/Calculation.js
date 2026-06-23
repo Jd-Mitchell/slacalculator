@@ -1,3 +1,4 @@
+
 import { HandleTime } from './Util.js';
 import { Message } from './Messages.js';
 
@@ -20,7 +21,7 @@ class Calculation {
         const failsafeSLA = initialSLA.plus({ hours: 24 });
         return new Calculation({
             currentDate: initialDate,
-            techHours: this.getTechHours(initialDate, selectedProvider),
+            techHours: this.getInitialTechHours(initialDate, selectedProvider),
             slaTime: selectedSLA,
             intitialSLA: initialSLA,
             failsafe: false,
@@ -31,13 +32,26 @@ class Calculation {
         });
     }
 
-    static getTechHours(initialDate, selectedProvider) {
+    static getInitialTechHours(initialDate, selectedProvider) {
         return {
             start: HandleTime.splitTime(selectedProvider.techStart),
             finish: HandleTime.splitTime(selectedProvider.techFinish),
         };
     }
-
+    static updateTechHours(currentDate, hours, timeKeeper) {
+        Object.keys(hours).forEach(key => {
+            hours[key] = hours[key].set({
+                day: currentDate.day,
+                hour: hours[key].hour,
+                minute: hours[key].minute,
+            })
+            
+        })
+        console.log("changed tech date")
+            console.log(hours.start.toString())
+            console.log(hours.finish.toString())
+        return hours
+    }
     static checkDay(hours, timeKeeper) {
         console.log(`currentdate is ${timeKeeper.currentDate}`);
 
@@ -79,14 +93,13 @@ class Calculation {
     }
 
     static checkHours(hours, today, timeKeeper) {
-       
-
-        // TODO: Change how techHours are updated instead of updating it here:
-
-         // Update the techHours for today's date
-        timeKeeper.techHours.start = timeKeeper.techHours.start.set({day: timeKeeper.currentDate.day})
-        timeKeeper.techHours.finish = timeKeeper.techHours.finish.set({day: timeKeeper.currentDate.day})
-
+        console.log(timeKeeper.techHours.start.toString())
+        console.log(timeKeeper.techHours.finish.toString())
+        // Update the techHours for today's date if the current Date is different
+        
+        timeKeeper.techHours.start.day === timeKeeper.currentDate.day
+            ? console.log('tech day is same day as current time')
+            : this.updateTechHours(timeKeeper.currentDate, timeKeeper.techHours)
 
         console.log('FAIL SAFE:')
         console.log(timeKeeper.failsafeSLA.toString())
