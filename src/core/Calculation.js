@@ -1,4 +1,4 @@
-import { splitTime } from './SplitTime.js'
+import { splitTime } from './Util.js'
 import { Message } from './Messages.js';
 
 class Calculation {

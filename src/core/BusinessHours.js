@@ -1,7 +1,7 @@
 import initialHoursTemplate from './data/initialHoursTemplate.json' with { type: 'json' };
 import { Message } from './Messages.js';
 import { Providers } from './Providers.js';
-import { splitTime } from './SplitTime.js';
+import { splitTime } from './Util.js';
 class BusinessHours {
     static #hours;
     constructor(day, opening, closing) {
