@@ -1,5 +1,5 @@
 import { Message } from './Messages.js';
-import { splitTime } from './SplitTime.js';
+import { splitTime } from './Util.js';
 class HoursInput {
     // static state = {
     //     #daysArray: []
@@ -47,39 +47,53 @@ class HoursInput {
 
     static validateInput(hoursObjects) {
         hoursObjects.every((object) => {
-            object.openingTime = object.openingTime.toUpperCase()
-            object.closingTime = object.closingTime.toUpperCase()
-            if ((object.openingTime === 'CLOSED' && object.closingTime === 'CLOSED') || (object.openingTime === 'CLOSED'&& object.closingTime ==='')) {
-                return true;
-            }
-            if ((object.openingTime === '24/7' && object.closingTime === '24/7') || (object.openingTime === '24/7'&& object.closingTime ==='')) {
-                return true;
-            }
-             if ((object.openingTime === '24/7' && object.closingTime === '24/7') || (object.openingTime === '24/7'&& object.closingTime ==='')) {
-                return true;
-            }
-            if ((object.openingTime === 'CLOSED' && object.closingTime !== 'CLOSED' && object.closingTime !== '') || (object.openingTime !== 'CLOSED' && object.closingTime === 'CLOSED')) {
-                Message.throwError(this, 'INCORRECT_CLOSED_USAGE', hoursObjects);
-            }
-            if ((object.openingTime === '24/7' && object.closingTime !== '24/7' && object.closingTime !== '') || (object.openingTime !== '24/7' && object.closingTime === '24/7')) {
-                Message.throwError(this, 'INCORRECT_24/7_USAGE', hoursObjects);
-            }
+            object.openingTime = object.openingTime.toUpperCase().trim()
+            object.closingTime = object.closingTime.toUpperCase().trim()
 
-            if (object.openingTime !== 'CLOSED' && (/[^0-9:]/.test(object.openingTime) || ((object.openingTime !== 'CLOSED' && object.openingTime !== '24-7' && /[^0-9:]/.test(object.closingTime))))) {
-                Message.throwError(this, 'NO_LETTERS_ALLOWED', hoursObjects);
-            }
-            if (object.openingTime === '' || object.closingTime === '') {
-                Message.throwError(this, 'BLANK_TIMES', hoursObjects);
-            }
-            
-            if ((object.openingTime !== 'CLOSED' && (object.openingTime.length < 4 || object.openingTime.length > 4)) || (object.closingTime !== 'CLOSED' && (object.closingTime.length < 4 || object.closingTime.length > 4))) {
-                Message.throwError(this, 'INCORRECT_NUMBER_FORMAT', hoursObjects);
-            }
 
-            if (object.openingTime !== 'CLOSED' && !/[^0-9:]/.test(object.openingTime)) {
+            if (!/^\d{4}$/.test(object.openingTime) || !/^\d{4}$/.test(object.closingTime)) {
+                // input is not a number string and not 4 digits
+
+                // check the inputs
+                // create the keywords list (Add to this list)
+                let keywords = ['CLOSED', '24/7', 'HOLIDAY', 'STOCKTAKE']
+                // if the closed or 24/7 is used on the opening Input
+                if (keywords.includes(object.openingTime) || keywords.includes(object.closingTime)) {
+                    let keyword = keywords.includes(object.openingTime)
+                    ? object.openingTime
+                    : object.closingTime
+                    // success path:
+                    if (object.closingTime === object.openingTime || object.closingTime === '') {
+                        return true
+                    }
+                    // fail path:
+                    else if (object.openingTime !== object.closingTime) {
+                        Message.throwError(this, `INCORRECT_${keyword}_USAGE`, hoursObjects)
+                    }
+                }
+                // keywords used incorrectly
+
+                else if (/[A-Z]/i.test(object.openingTime) || /[A-Z]/i.test(object.closingTime)) {
+                    Message.throwError(this, 'NO_LETTERS_ALLOWED', hoursObjects);
+                }
+                else {
+                    if (object.openingTime === '' || object.closingTime === '') {
+                        Message.throwError(this, 'BLANK_TIMES', hoursObjects);
+                    } else {
+
+                        Message.throwError(this, 'INCORRECT_NUMBER_FORMAT', hoursObjects);
+                    }
+                }
+            } else {
+                console.log('input is 4 numbers')
                 const opening = splitTime(object.openingTime);
+                console.log(opening)
+
                 const closing = splitTime(object.closingTime);
-                if (!(opening.hour >= 0 && opening.hour < 24) || !(opening.minute >= 0 && opening.minute < 60) || !(closing.hour >= 0 && closing.hour < 24) || !(closing.minute >= 0 && closing.minute < 60)) {
+                console.log(closing)
+                if ((opening.hour < 0 || opening.hour > 23) || (opening.minute < 0 || opening.minute >= 60)) {
+                    Message.throwError(this, 'TIMES_OUT_OF_BOUNDS', hoursObjects);
+                } else if ((closing.hour < 0 || closing.hour > 23) || (closing.minute < 0 || closing.minute >= 60)) {
                     Message.throwError(this, 'TIMES_OUT_OF_BOUNDS', hoursObjects);
                 }
             }
@@ -94,24 +108,6 @@ class HoursInput {
         console.log('validating Input...');
         this.validateInput(hoursList);
         console.log('SUCCESS');
-        //   return {
-        //     status: 'SUCCESS',
-        //     data: hoursList
-        //   }
-        // } catch (error) {
-        //   if (error.customError) {
-        //     console.warn(`${error.name}. ${error.message}`)
-        //     return {
-        //       status: 'FAIL',
-        //       code: error.code,
-        //       name: error.name,
-        //       message: error.message,
-        //       data: hoursList
-        //     }
-        //   } else {
-        //     throw error
-        //   }
-        // }
     }
 
     static errors = [
@@ -125,7 +121,7 @@ class HoursInput {
             name: 'Typo: "CLOSED" used incorrectly.',
             message: '"CLOSED" must either be in the opening field and nothing in the closing field, OR "CLOSED" in both fields.',
         },
-         {
+        {
             code: 'INCORRECT_24/7_USAGE',
             name: 'Typo: "24/7" used incorrectly.',
             message: '"24/7" must either be in the opening field and nothing in the closing field, OR "24/7" in both fields.',
