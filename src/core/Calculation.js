@@ -22,7 +22,7 @@ class Calculation {
             currentDate: initialDate,
             techHours: this.getTechHours(selectedProvider),
             slaTime: selectedSLA,
-            intiailSLA: initialSLA,
+            intitialSLA: initialSLA,
             failsafe: false,
             failCount: 0,
             failsafeSLA: failsafeSLA,
