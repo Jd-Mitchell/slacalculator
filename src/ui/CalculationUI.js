@@ -1,13 +1,13 @@
 import { BusinessHours } from '../core/BusinessHours.js';
 import { Calculation } from '../core/Calculation.js';
 import { HoursInput } from '../core/HandleInput.js';
-import { HoursDisplay } from './HoursDisplay.js';
-import { HoursUI } from './HoursUI.js';
+// import { HoursDisplay } from './HoursDisplay.js';
+import { HoursUI, HoursDisplay } from './HoursUI.js';
 import { Message } from '../core/Messages.js';
-import { MessageDisplay } from './Messagehandler.js';
+// import { MessageDisplay } from './UIBuilder.js';
 import { ProvidersUI } from './ProvidersUI.js';
-import { HandleTime } from '../core/HandleTime.js';
-import { TimeUI } from './TimeUI.js';
+import { HandleTime } from '../core/Util.js';
+import { MessageDisplay, TimeUI } from './UIBuilder.js';
 
 class CalculationUI {
     static state = {

@@ -1,5 +1,5 @@
 import { Providers } from '../core/Providers.js';
-import { UICreator } from './UICreator.js';
+import { UICreator } from '././UIBuilder.js';
 
 class ProvidersUI {
     static state = {

@@ -1,11 +1,11 @@
-import { UICreator } from './UICreator.js'
+import { UICreator } from './UIBuilder.js'
 
 class Version {
 
     static state = {
-        version: '2.0.5',
-        build: 10,
-        isDev: true,
+        version: '2.1.0',
+        build: 11,
+        isDev: false,
         copyright: '2026',
         vendor: 'JDMCreative'
     }
