@@ -9,7 +9,7 @@ class UICreator {
         this.text = text;
 
         this.element = document.createElement(this.tagName);
-
+        
         if (this.text) this.element.textContent = this.text;
         if (this.classes.length) this.element.classList.add(...this.classes);
         if (this.ids.length) this.ids.forEach((id) => (this.element.id = id));
@@ -40,6 +40,42 @@ class UICreator {
         }
     }
 }
+
+export { UICreator }
+
+import { HandleTime, StatesCreator } from '../core/Util.js';
+// import { StatesCreator } from '../core/Util.js';
+// import { UICreator } from './UICreator.js';
+class StatesUI {
+    static state = {
+        selectedState: '',
+    };
+    static setupStatesDropdown() {
+        console.log('states User Interface setup');
+        const statesSelector = document.querySelector('#state');
+        const states = StatesCreator.getOptions();
+
+        // this.state.selectedState = 'VIC';
+        // this.state.initialTime = HandleTime.getCurrentDate(this.state.selectedState);
+
+        statesSelector.addEventListener('change', (e) => {
+            // e.target is the select element; its value is the chosen option's value
+            this.state.selectedState = StatesCreator.getState(e.target.value);
+            HandleTime.getCurrentDate(this.state.selectedState);
+            console.log(HandleTime.state.initialDate.toString())
+        });
+        states.forEach((state) => {
+            const optionElement = UICreator.createNewElement(statesSelector, 'option', [], [], { value: state.state }, {}, state.state);
+
+            if (state.state === 'VIC') {
+                optionElement.element.selected = true;
+            }
+        });
+        statesSelector.dispatchEvent(new Event('change'));
+    }
+}
+export { StatesUI };
+
 import { CalculationUI } from './CalculationUI.js';
 
 class TimeUI {
@@ -61,6 +97,10 @@ class TimeUI {
     }
 }
 
+export { TimeUI };
+
+
+
 class MessageDisplay {
     static messageContainer = document.querySelector('.message-display');
     static messageBoxContainer = null;
@@ -70,11 +110,12 @@ class MessageDisplay {
     static createMessage(message) {
         if (message.status === 'SUCCESS') {
             this.messageBoxContainer.element.classList.add('success-message');
-            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, 'SUCCESS!');
+            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'h3', [], [], {}, {}, 'SUCCESS!');
         } else {
             this.messageBoxContainer.element.classList.add('error-message');
-            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, 'ERROR:');
-            const messageName = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, message.name);
+            const messageHeader = UICreator.createNewElement(this.messageBoxContainer.element, 'h2', [], [], {}, {}, 'ERROR:');
+            const headingBr = UICreator.createNewElement(this.messageBoxContainer.element, 'br', [], [], {}, {}, '');
+            const messageName = UICreator.createNewElement(this.messageBoxContainer.element, 'h4', [], [], {}, {}, message.name);
             const messageBr = UICreator.createNewElement(this.messageBoxContainer.element, 'br', [], [], {}, {}, '');
             const messageMain = UICreator.createNewElement(this.messageBoxContainer.element, 'p', [], [], {}, {}, message.message);
         }
@@ -93,6 +134,7 @@ class MessageDisplay {
         this.createMessageBox();
         this.createMessage(message);
     }
+    
 }
 
-export { UICreator }
+export { MessageDisplay };

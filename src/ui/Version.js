@@ -1,4 +1,4 @@
-import { UICreator } from './UICreator.js'
+import { UICreator } from './UIBuilder.js'
 
 class Version {
 

@@ -1,7 +1,7 @@
 import initialHoursTemplate from './data/initialHoursTemplate.json' with { type: 'json' };
 import { Message } from './Messages.js';
 import { Providers } from './Providers.js';
-import { splitTime } from './Util.js';
+import { HandleTime } from './Util.js';
 class BusinessHours {
     static #hours;
     constructor(day, opening, closing) {
@@ -63,12 +63,12 @@ class BusinessHours {
                         validatedDay = true
 
                         if (day.opening !== 'CLOSED') {
-                            const techStart = splitTime(provider.techStart)
-                            const techFinish = splitTime(provider.techFinish)
+                            const techStart = HandleTime.splitTime(provider.techStart)
+                            const techFinish = HandleTime.splitTime(provider.techFinish)
                             if (day.opening !== '24/7'){
     
-                                const opening = splitTime(day.opening);
-                                const closing = splitTime(day.closing);
+                                const opening = HandleTime.splitTime(day.opening);
+                                const closing = HandleTime.splitTime(day.closing);
                                 console.log(opening)
                                 console.log(closing)
     

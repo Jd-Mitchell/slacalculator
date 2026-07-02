@@ -1,5 +1,5 @@
 import { Message } from './Messages.js';
-import { splitTime } from './Util.js';
+import { HandleTime } from './Util.js';
 class HoursInput {
     // static state = {
     //     #daysArray: []
@@ -86,10 +86,10 @@ class HoursInput {
                 }
             } else {
                 console.log('input is 4 numbers')
-                const opening = splitTime(object.openingTime);
+                const opening = HandleTime.splitTime(object.openingTime);
                 console.log(opening)
 
-                const closing = splitTime(object.closingTime);
+                const closing = HandleTime.splitTime(object.closingTime);
                 console.log(closing)
                 if ((opening.hour < 0 || opening.hour > 23) || (opening.minute < 0 || opening.minute >= 60)) {
                     Message.throwError(this, 'TIMES_OUT_OF_BOUNDS', hoursObjects);
