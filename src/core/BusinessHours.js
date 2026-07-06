@@ -2,6 +2,7 @@ import initialHoursTemplate from './data/initialHoursTemplate.json' with { type:
 import { Message } from './Messages.js';
 import { Providers } from './Providers.js';
 import { HandleTime } from './Util.js';
+
 class BusinessHours {
     static #hours;
     constructor(day, opening, closing) {
@@ -13,6 +14,7 @@ class BusinessHours {
     static getInitialHours() {
         return this.#hours ? !null : initialHoursTemplate.map((item) => new BusinessHours(item.day, item.opening, item.closing));
     }
+
 
     static getHours(hoursObjects) {
         const hours = this.getInitialHours();
@@ -72,20 +74,20 @@ class BusinessHours {
                                 console.log(opening)
                                 console.log(closing)
     
-                                 if (opening.hour >= 0 && opening.hour < techStart.hour){
+                                 if (opening.hour >= 0 && opening < techStart){
                                     console.log('Before Tech Start time!')
                                     day.opening = provider.techStart
                                     console.log(day.opening)
                                     validatedDay = false
                                     continue
                                 }
-                                 if ((closing.hour > techFinish.hour) || (closing.hour >= 0 && closing.hour < techStart.hour)){
+                                 if ((closing> techFinish) || (closing.hour >= 0 && closing < techStart)){
                                     console.log('After TechHours!')
                                     day.closing = provider.techFinish
                                     console.log(day.closing)
                                     validatedDay = false
                                     continue
-                                } else if (closing.hour >= 0 && closing.hour <= techStart.hour){
+                                } else if (closing.hour >= 0 && closing <= techStart){
                                     console.log('After Midnight!')
                                     day.closing = '2400'
                                     console.log(day.closing)
@@ -93,7 +95,7 @@ class BusinessHours {
                                     continue
                                 }
     
-                               if (opening.hour > closing.hour && (closing.hour > techStart.hour)){
+                               if (opening > closing && (closing > techStart)){
                                    Message.throwError(this, 'OUT_OF_BOUNDS', hours)  
                                 } 
                                 if (
