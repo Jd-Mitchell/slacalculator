@@ -1,5 +1,5 @@
 
-import { HandleTime } from './Util.js';
+import { HandleTime, LuxonBridge } from './Util.js';
 import { Message } from './Messages.js';
 
 class Calculation {
@@ -21,7 +21,7 @@ class Calculation {
         const failsafeSLA = initialSLA.plus({ hours: 24 });
         return new Calculation({
             currentDate: initialDate,
-            techHours: this.getInitialTechHours(initialDate, selectedProvider),
+            techHours: this.getInitialTechHours(selectedProvider),
             slaTime: selectedSLA,
             intitialSLA: initialSLA,
             failsafe: false,
@@ -30,21 +30,29 @@ class Calculation {
             isCalculated: false,
             timeDifference: 0,
         });
+
     }
 
-    static getInitialTechHours(initialDate, selectedProvider) {
+    static getInitialTechHours(selectedProvider) {
         return {
             start: HandleTime.splitTime(selectedProvider.techStart),
             finish: HandleTime.splitTime(selectedProvider.techFinish),
         };
     }
-    static updateTechHours(currentDate, hours, timeKeeper) {
+    static updateTechHours(currentDate, hours) {
+        console.log(hours)
+       
         Object.keys(hours).forEach(key => {
-            hours[key] = hours[key].set({
+             if (LuxonBridge.DateTime.isDateTime(hours[key])){
+            hours[key] = hours[key].set({ day: currentDate.day})
+        } else {
+            hours[key] = LuxonBridge.DateTime.fromObject({
                 day: currentDate.day,
                 hour: hours[key].hour,
                 minute: hours[key].minute,
             })
+        }
+
             
         })
         console.log("changed tech date")
@@ -54,6 +62,7 @@ class Calculation {
     }
     static checkDay(hours, timeKeeper) {
         console.log(`currentdate is ${timeKeeper.currentDate}`);
+        console.log(timeKeeper.techHours)
 
         let i = 0;
         let today = 0;
@@ -93,8 +102,6 @@ class Calculation {
     }
 
     static checkHours(hours, today, timeKeeper) {
-        console.log(timeKeeper.techHours.start.toString())
-        console.log(timeKeeper.techHours.finish.toString())
         // Update the techHours for today's date if the current Date is different
         
         timeKeeper.techHours.start.day === timeKeeper.currentDate.day
@@ -318,6 +325,7 @@ class Calculation {
 
     static callCalculation(initialDate, selectedProvider, selectedSLA, hours) {
         const timeKeeper = this.initialise({ initialDate, selectedProvider, selectedSLA });
+        timeKeeper.techHours = this.updateTechHours(timeKeeper.currentDate, timeKeeper.techHours)
         return this.checkDay(hours, timeKeeper);
     }
     static errors = [
