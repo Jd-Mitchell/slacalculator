@@ -1,4 +1,5 @@
-import { HandleTime } from './Util.js';
+
+import { HandleTime, LuxonBridge } from './Util.js';
 import { Message } from './Messages.js';
 
 class Calculation {
@@ -20,7 +21,7 @@ class Calculation {
         const failsafeSLA = initialSLA.plus({ hours: 24 });
         return new Calculation({
             currentDate: initialDate,
-            techHours: this.getTechHours(selectedProvider),
+            techHours: this.getInitialTechHours(selectedProvider),
             slaTime: selectedSLA,
             intitialSLA: initialSLA,
             failsafe: false,
@@ -29,17 +30,44 @@ class Calculation {
             isCalculated: false,
             timeDifference: 0,
         });
+
     }
 
-    static getTechHours(selectedProvider) {
+    static getInitialTechHours(selectedProvider) {
         return {
             start: HandleTime.splitTime(selectedProvider.techStart),
             finish: HandleTime.splitTime(selectedProvider.techFinish),
         };
     }
+    static updateTechHours(currentDate, hours) {
+        console.log(hours)
+       
+        Object.keys(hours).forEach(key => {
+             if (LuxonBridge.DateTime.isDateTime(hours[key])){
+            hours[key] = hours[key].set({ day: currentDate.day})
+        } else {
+           
+            hours[key] = LuxonBridge.DateTime.fromObject({
+                day: currentDate.day,
+                hour: hours[key].hour,
+                minute: hours[key].minute,
+            },
+        {
+            zone: currentDate.zoneName,
+        })
+            hours[key] 
+        }
 
+            
+        })
+        console.log("changed tech date")
+            console.log(hours.start.toString())
+            console.log(hours.finish.toString())
+        return hours
+    }
     static checkDay(hours, timeKeeper) {
         console.log(`currentdate is ${timeKeeper.currentDate}`);
+        console.log(timeKeeper.techHours)
 
         let i = 0;
         let today = 0;
@@ -79,20 +107,27 @@ class Calculation {
     }
 
     static checkHours(hours, today, timeKeeper) {
-        console.log('FAIL SAFE:');
-        console.log(timeKeeper.failsafeSLA.toString());
-        console.log(timeKeeper.currentDate.toString());
-        console.log(`fail Count: ${timeKeeper.failCount}`);
+        // Update the techHours for today's date if the current Date is different
+        
+        timeKeeper.techHours.start.day === timeKeeper.currentDate.day
+            ? console.log('tech day is same day as current time')
+            : this.updateTechHours(timeKeeper.currentDate, timeKeeper.techHours)
+
+        console.log('FAIL SAFE:')
+        console.log(timeKeeper.failsafeSLA.toString())
+        console.log(timeKeeper.currentDate.toString())
+        console.log(`fail Count: ${timeKeeper.failCount}`)
         if (timeKeeper.failsafe === false) {
             if (timeKeeper.currentDate >= timeKeeper.failsafeSLA) {
-                console.log('the date has exceeded upper threshold!');
-                timeKeeper.failsafe = true;
-                timeKeeper.failCount++;
-                console.log(`FAIL COUNT: ${timeKeeper.failCount}`);
-            } else if (timeKeeper.currentDate.day === timeKeeper.failsafeSLA.day && timeKeeper.currentDate.hour < timeKeeper.failsafeSLA.hour && timeKeeper.isCalculated === false) {
-                console.log("the date hasn't been calculated yet and the current date is within a day of the failsafe!");
-                timeKeeper.failsafe = true;
-                timeKeeper.failCount++;
+                console.log('the date has exceeded upper threshold!')
+                timeKeeper.failsafe = true
+                timeKeeper.failCount++
+                console.log(`FAIL COUNT: ${timeKeeper.failCount}`)
+            } else if (
+                (timeKeeper.currentDate.day === timeKeeper.failsafeSLA.day && timeKeeper.currentDate < timeKeeper.failsafeSLA) && timeKeeper.isCalculated === false) {
+                console.log("the date hasn't been calculated yet and the current date is within a day of the failsafe!")
+                timeKeeper.failsafe = true
+                timeKeeper.failCount++
             } else {
                 console.log('failsafe not tripped');
             }
@@ -112,22 +147,26 @@ class Calculation {
             console.log('WE NEVER CLOSE!');
             ((operatingHours.open = timeKeeper.techHours.start), (operatingHours.close = timeKeeper.techHours.finish));
         } else {
-            console.log('WE CLOSE!');
-            ((operatingHours.open = HandleTime.splitTime(hours[today].opening)), (operatingHours.close = HandleTime.splitTime(hours[today].closing)));
+            console.log('WE CLOSE!')
+            operatingHours.open = HandleTime.getHours(timeKeeper.currentDate, hours[today].opening),
+                operatingHours.close = HandleTime.getHours(timeKeeper.currentDate, hours[today].closing)
         }
 
-        console.log(operatingHours);
+        console.log(operatingHours.open.toString())
+        console.log(operatingHours.close.toString())
 
         const openCloseHours = {
             open: this.getCurrentHours(timeKeeper.techHours.start, operatingHours.open, timeKeeper),
-            close: this.getCurrentHours(timeKeeper.techHours.finish, operatingHours.close, timeKeeper),
-        };
-        console.log(openCloseHours);
+            close: this.getCurrentHours(timeKeeper.techHours.finish, operatingHours.close, timeKeeper)
+        }
+        console.log(openCloseHours.open.toString())
+        console.log(openCloseHours.close.toString())
+        console.log(timeKeeper.currentDate.toString())
         switch (true) {
-            case timeKeeper.currentDate.hour < openCloseHours.open.hour || timeKeeper.currentDate.hour > openCloseHours.close.hour || (timeKeeper.currentDate.hour === openCloseHours.close.hour && timeKeeper.currentDate.minute >= openCloseHours.close.minute):
-                console.log('Outside of Hours!');
-                return this.handleOutsideHours(hours, openCloseHours, timeKeeper);
-                break;
+            case timeKeeper.currentDate < openCloseHours.open || timeKeeper.currentDate > openCloseHours.close:
+                console.log('Outside of Hours!')
+                return this.handleOutsideHours(hours, openCloseHours, timeKeeper)
+                break
             default:
                 console.log('inside of hours!');
                 if (timeKeeper.failsafe === false) {
@@ -142,15 +181,18 @@ class Calculation {
                 } else {
                     console.log('failsafe has been tripped!');
                     if (timeKeeper.isCalculated === true) {
-                        console.log('Calculated!');
-                        timeKeeper.timeDifference = timeKeeper.currentDate.hour * 60 + timeKeeper.currentDate.minute - (openCloseHours.close.hour * 60 + openCloseHours.close.minute);
-                        console.log(timeKeeper.timeDifference);
-                    } else {
-                        console.log('Was not calculated!');
-                        const hoursPlusSLA = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime });
-                        console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`);
-                        console.log(hoursPlusSLA);
-                        const closingHours = timeKeeper.currentDate.set(openCloseHours.close);
+                        console.log('Calculated!')
+                        // changing time difference into luxon diff helper function
+                        timeKeeper.timeDifference = this.getTimeDifference(timeKeeper.currentDate, openCloseHours.close, timeKeeper)
+                        // timeKeeper.timeDifference = timeKeeper.currentDate.hour * 60 + timeKeeper.currentDate.minute - (openCloseHours.close.hour * 60 + openCloseHours.close.minute)
+                        console.log(timeKeeper.timeDifference)
+                    }
+                    else {
+                        console.log('Was not calculated!')
+                        const hoursPlusSLA = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime })
+                        console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`)
+                        console.log(hoursPlusSLA)
+                        const closingHours = timeKeeper.currentDate.set(openCloseHours.close)
 
                         timeKeeper.currentDate = timeKeeper.slaTime <= 8 && hoursPlusSLA <= closingHours ? hoursPlusSLA : closingHours;
 
@@ -168,8 +210,8 @@ class Calculation {
             console.log('The fail safe has been tripped!');
         }
         switch (true) {
-            case timeKeeper.currentDate.hour < openCloseHours.open.hour:
-                console.log('Before Hours!');
+            case timeKeeper.currentDate < openCloseHours.open:
+                console.log('Before Hours!')
 
                 timeKeeper.currentDate = timeKeeper.currentDate.set({
                     hour: openCloseHours.open.hour,
@@ -191,39 +233,46 @@ class Calculation {
                           })),
                           this.checkDay(hours, timeKeeper))
                         : (console.log('Calculated!'),
-                          console.log(timeKeeper.timeDifference),
-                          (timeKeeper.currentDate = timeKeeper.currentDate.set({
-                              hour: openCloseHours.open.hour + Math.floor(timeKeeper.timeDifference / 60),
-                              minute: openCloseHours.open.minute + (timeKeeper.timeDifference % 60),
-                          })),
-                          this.checkDay(hours, timeKeeper));
+                            console.log(timeKeeper.timeDifference),
+                            console.log(openCloseHours.open.hour.toString()),
+                            console.log(openCloseHours.open.minute.toString()),
+                            (timeKeeper.currentDate = timeKeeper.currentDate.set({
+                                hour: openCloseHours.open.hour + Math.floor(timeKeeper.timeDifference / 60),
+                                minute: openCloseHours.open.minute + (timeKeeper.timeDifference % 60)
+                            })),
+                            this.checkDay(hours, timeKeeper))
+
                 }
                 break;
 
             default:
                 console.log('after hours!');
                 if (timeKeeper.isCalculated === true) {
-                    timeKeeper.timeDifference = timeKeeper.currentDate.hour * 60 + timeKeeper.currentDate.minute - (openCloseHours.close.hour * 60 + openCloseHours.close.minute);
-                    console.log(timeKeeper.timeDifference);
+                    // changing time difference into luxon diff helper function
+                    timeKeeper.timeDifference = this.getTimeDifference(timeKeeper.currentDate, openCloseHours.close, timeKeeper)
+                    // timeKeeper.timeDifference = timeKeeper.currentDate.hour * 60 + timeKeeper.currentDate.minute - (openCloseHours.close.hour * 60 + openCloseHours.close.minute)
+                    console.log(timeKeeper.timeDifference)
                 }
-                timeKeeper.currentDate = timeKeeper.currentDate.plus({ days: 1 });
-                timeKeeper.currentDate = timeKeeper.currentDate.set({
-                    hour: 0,
-                    minute: 0,
-                });
-                return this.checkDay(hours, timeKeeper);
+                openCloseHours
+                timeKeeper.currentDate = timeKeeper.currentDate.plus({ days: 1 }).startOf('day')
+                return this.checkDay(hours, timeKeeper)
         }
     }
 
     static calculate(timeKeeper) {
-        console.log('Calculating...');
-        console.log(`current Date: ${timeKeeper.currentDate.toString()}`);
-        const newDate = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime });
-        timeKeeper.currentDate = newDate;
-        timeKeeper.isCalculated = true;
-        console.log('Calculated!');
-        console.log(`New date: ${newDate.toString()}`);
-        return timeKeeper;
+        console.log('Calculating...')
+        console.log(`current Date: ${timeKeeper.currentDate.toString()}`)
+        timeKeeper.currentDate = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime })
+        timeKeeper.isCalculated = true
+        console.log('Calculated!')
+        console.log(`New date: ${timeKeeper.currentDate.toString()}`)
+        return timeKeeper
+    }
+
+    static getTimeDifference(currentDate, closingTime, timeKeeper) {
+        timeKeeper.timeDifference = currentDate.diff(closingTime, 'minutes')
+        timeKeeper.timeDifference = Math.floor(timeKeeper.timeDifference.minutes)
+        return timeKeeper.timeDifference
     }
 
     static getCurrentHours(techTime, operatingTime, timeKeeper) {
@@ -234,6 +283,7 @@ class Calculation {
             case true:
                 console.log('Start time!');
                 switch (true) {
+
                     case techTime.hour > operatingTime.hour:
                         console.log('Tech start is later!');
                         currentHours = techTime;
@@ -242,25 +292,41 @@ class Calculation {
                         console.log('opening is later!');
                         currentHours = operatingTime;
                         break;
-                    default:
-                        currentHours = techTime;
+
+                    case techTime > operatingTime:
                 }
                 break;
             case false:
                 console.log('finish time!');
                 switch (true) {
+
                     case operatingTime.hour > 0 && operatingTime.hour <= timeKeeper.techHours.start.hour:
                         console.log('hours are after midnight but before or equal to techTime!');
-                        currentHours = techTime;
                         break;
                     case techTime.hour <= operatingTime.hour:
                         console.log('Tech finish ealier!');
+                        console.log(operatingTime.hour)
+                        console.log(techTime.hour)
+                        console.log(timeKeeper.currentDate.toString())
                         currentHours = techTime;
+                        console.log(currentHours.toString())
                         break;
                     case techTime.hour >= operatingTime.hour:
                         console.log('closing earlier!');
                         currentHours = operatingTime;
                         break;
+                    case operatingTime > 0 && operatingTime <= timeKeeper.techHours.start:
+                        console.log('hours are after midnight but before or equal to techTime!')
+                        currentHours = techTime
+                        break
+                    case techTime <= operatingTime:
+                        console.log('Tech finish ealier!')
+                        currentHours = techTime
+                        break
+                    case techTime >= operatingTime:
+                        console.log('closing earlier!')
+                        currentHours = operatingTime
+                        break
                     default:
                         currentHours = techTime;
                 }
@@ -271,6 +337,7 @@ class Calculation {
 
     static callCalculation(initialDate, selectedProvider, selectedSLA, hours) {
         const timeKeeper = this.initialise({ initialDate, selectedProvider, selectedSLA });
+        timeKeeper.techHours = this.updateTechHours(timeKeeper.currentDate, timeKeeper.techHours)
         return this.checkDay(hours, timeKeeper);
     }
     static errors = [
