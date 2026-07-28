@@ -46,11 +46,16 @@ class Calculation {
              if (LuxonBridge.DateTime.isDateTime(hours[key])){
             hours[key] = hours[key].set({ day: currentDate.day})
         } else {
+           
             hours[key] = LuxonBridge.DateTime.fromObject({
                 day: currentDate.day,
                 hour: hours[key].hour,
                 minute: hours[key].minute,
-            })
+            },
+        {
+            zone: currentDate.zoneName,
+        })
+            hours[key] 
         }
 
             
@@ -154,6 +159,9 @@ class Calculation {
             open: this.getCurrentHours(timeKeeper.techHours.start, operatingHours.open, timeKeeper),
             close: this.getCurrentHours(timeKeeper.techHours.finish, operatingHours.close, timeKeeper)
         }
+        console.log(openCloseHours.open.toString())
+        console.log(openCloseHours.close.toString())
+        console.log(timeKeeper.currentDate.toString())
         switch (true) {
             case timeKeeper.currentDate < openCloseHours.open || timeKeeper.currentDate > openCloseHours.close:
                 console.log('Outside of Hours!')
@@ -297,7 +305,11 @@ class Calculation {
                         break;
                     case techTime.hour <= operatingTime.hour:
                         console.log('Tech finish ealier!');
+                        console.log(operatingTime.hour)
+                        console.log(techTime.hour)
+                        console.log(timeKeeper.currentDate.toString())
                         currentHours = techTime;
+                        console.log(currentHours.toString())
                         break;
                     case techTime.hour >= operatingTime.hour:
                         console.log('closing earlier!');
