@@ -30,7 +30,9 @@ class CalculationUI {
         const hoursArray = [];
 
         Object.values(HoursUI.state.hoursBlockDetails).forEach((block) => {
+            console.log(`DAY FROM? ${block.dayFrom}`)
             let dayFrom = block.dayFrom;
+            console.log(`DAY TO? ${block.dayTo}`)
             let dayTo = block.dayTo;
             let openingTime = block.openingText.element.value;
             let closingTime = block.closingText.element.value;

@@ -117,6 +117,9 @@ class BusinessHours {
                             }
                             // validatedDay = true
                         }
+                    } else {
+                        console.log('24/7 hours!')
+                        day.opening = '24/7'
                     }
                 }
             });

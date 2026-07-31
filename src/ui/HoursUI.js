@@ -56,11 +56,12 @@ class HoursUI {
         const newElements = Object.values(elementBlocks)
         console.log(newElements)
         console.log('element left over:')
-        console.log(newElements[0].selectFrom.element.value)
-        console.log(newElements[0].selectTo.element)
-
+        console.dir(newElements[0])
         newElements[0].selectTo.element.value = '7'
+        newElements[0].selectTo.element.dispatchEvent(new Event('change'));
+        console.log(newElements[0].selectTo.element.value)
         newElements[0].openingInput.element.value = '24/7'
+        newElements[0].openingInput.element.dispatchEvent(new Event('change'));
         CalculationUI.lockHoursUI()
         // CalculationUI.state.calculateButton.click()
     }
