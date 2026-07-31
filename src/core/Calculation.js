@@ -41,28 +41,34 @@ class Calculation {
     }
     static updateTechHours(currentDate, hours) {
         console.log(hours)
-       
-        Object.keys(hours).forEach(key => {
-             if (LuxonBridge.DateTime.isDateTime(hours[key])){
-            hours[key] = hours[key].set({ day: currentDate.day})
-        } else {
-           
-            hours[key] = LuxonBridge.DateTime.fromObject({
-                day: currentDate.day,
-                hour: hours[key].hour,
-                minute: hours[key].minute,
-            },
-        {
-            zone: currentDate.zoneName,
-        })
-            hours[key] 
-        }
 
-            
+        Object.keys(hours).forEach(key => {
+            if (LuxonBridge.DateTime.isDateTime(hours[key])) {
+                console.log(`tech hours exist already`)
+                hours[key] = hours[key].set({
+                    year: currentDate.year,
+                    month: currentDate.month,
+                    day: currentDate.day,
+                 })
+                console.log(hours[key].toString())
+            } else {
+
+                hours[key] = LuxonBridge.DateTime.fromObject({
+                    day: currentDate.day,
+                    hour: hours[key].hour,
+                    minute: hours[key].minute,
+                },
+                    {
+                        zone: currentDate.zoneName,
+                    })
+                hours[key]
+            }
+
+
         })
         console.log("changed tech date")
-            console.log(hours.start.toString())
-            console.log(hours.finish.toString())
+        console.log(hours.start.toString())
+        console.log(hours.finish.toString())
         return hours
     }
     static checkDay(hours, timeKeeper) {
@@ -108,7 +114,7 @@ class Calculation {
 
     static checkHours(hours, today, timeKeeper) {
         // Update the techHours for today's date if the current Date is different
-        
+
         timeKeeper.techHours.start.day === timeKeeper.currentDate.day
             ? console.log('tech day is same day as current time')
             : this.updateTechHours(timeKeeper.currentDate, timeKeeper.techHours)
@@ -227,11 +233,11 @@ class Calculation {
                 } else {
                     return timeKeeper.isCalculated === false
                         ? (console.log('not Calculated!'),
-                          (timeKeeper.currentDate = timeKeeper.currentDate.set({
-                              hour: openCloseHours.open.hour,
-                              minute: openCloseHours.open.minute,
-                          })),
-                          this.checkDay(hours, timeKeeper))
+                            (timeKeeper.currentDate = timeKeeper.currentDate.set({
+                                hour: openCloseHours.open.hour,
+                                minute: openCloseHours.open.minute,
+                            })),
+                            this.checkDay(hours, timeKeeper))
                         : (console.log('Calculated!'),
                             console.log(timeKeeper.timeDifference),
                             console.log(openCloseHours.open.hour.toString()),
