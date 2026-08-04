@@ -5,7 +5,7 @@ class Version {
     static state = {
         version: '2.2.3',
         build: 16,
-        isDev: false,
+        isDev: true,
         copyright: '2026',
         vendor: 'JDMCreative'
     }
