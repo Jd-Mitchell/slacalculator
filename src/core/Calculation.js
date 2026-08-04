@@ -198,7 +198,11 @@ class Calculation {
                         const hoursPlusSLA = timeKeeper.currentDate.plus({ hours: timeKeeper.slaTime })
                         console.log(`Date: ${timeKeeper.currentDate.toString()}, date plus sla: ${hoursPlusSLA.toString()}`)
                         console.log(hoursPlusSLA)
-                        const closingHours = timeKeeper.currentDate.set(openCloseHours.close)
+                         const closingHours = timeKeeper.currentDate.set({
+                            hour: openCloseHours.close.hour,
+                            minute: openCloseHours.close.minute,
+                        },
+                        {zone: openCloseHours.zoneName})
 
                         timeKeeper.currentDate = timeKeeper.slaTime <= 8 && hoursPlusSLA <= closingHours ? hoursPlusSLA : closingHours;
 
